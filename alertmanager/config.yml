@@ -1,0 +1,25 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'email-alert'
+
+receivers:
+  - name: 'email-alert'
+    email_configs:
+      - to: 'toktarsultan4@gmail.com'
+        from: 'toktarsultan4@gmail.com'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'toktarsultan4@gmail.com'
+        auth_password: '{{ env "SMTP_PASSWORD" }}'
+        auth_identity: 'toktarsultan4@gmail.com'
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
+
+templates:
+  - '/etc/alertmanager/template/*.tmpl'

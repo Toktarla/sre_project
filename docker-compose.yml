@@ -32,6 +32,18 @@ services:
       - "9090:9090"
     restart: always
 
+  alertmanager:
+    container_name: alertmanager
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    environment:
+      - SMTP_PASSWORD
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - "9093:9093"
+    restart: always
 
 
 

@@ -1,0 +1,22 @@
+groups:
+  - name: example
+    rules:
+      - alert: HighMemoryUsage
+        expr: node_memory_Active_bytes / node_memory_MemTotal_bytes * 100 > 80
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is using too much memory"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} is using more than 80% of memory for more than 5 minutes."
+
+  - name: HightResponseTime
+    rules:
+        - alert: HighResponseTime
+          expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{job="DemoSite"}[5m])) > 0.5
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High response time detected"
+            description: "The 95th percentile response time is above 500ms for more than 5 minutes."
